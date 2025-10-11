@@ -1,0 +1,95 @@
+/// dropbear-engine template for gradle. its recommended to not touch it unless you
+/// know what you're doing
+
+plugins {
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinxSerialization)
+}
+
+group = "domain.projectExample"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+kotlin {
+    jvm()
+
+    val hostOs = System.getProperty("os.name")
+    val isArm64 = System.getProperty("os.arch") == "aarch64"
+    val isMingwX64 = hostOs.startsWith("Windows")
+    val nativeTarget = when {
+        hostOs == "Mac OS X" && isArm64 -> macosArm64("nativeLib")
+        hostOs == "Mac OS X" && !isArm64 -> macosX64("nativeLib")
+        hostOs == "Linux" && isArm64 -> linuxArm64("nativeLib")
+        hostOs == "Linux" && !isArm64 -> linuxX64("nativeLib")
+        isMingwX64 -> mingwX64("nativeLib")
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+    }
+
+    val libName = when {
+        hostOs == "Mac OS X" -> "libeucalyptus_core.dylib"
+        hostOs == "Linux" -> "libeucalyptus_core.so"
+        isMingwX64 -> "eucalyptus_core.dll.lib"
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+    }
+
+    val libPath = if (file("${project.rootDir}/target/debug/$libName").exists()) {
+        println("Debug library exists")
+        "${project.rootDir}/target/debug/$libName"
+    } else if (file("${project.rootDir}/target/release/$libName").exists()) {
+        println("Release library exists")
+        "${project.rootDir}/target/release/$libName"
+    } else if (file("${project.rootDir}/libs/$libName").exists()) {
+        println("Local library exists")
+        "${project.rootDir}/libs/$libName"
+    } else {
+        throw GradleException("libeucalyptus_core.so does not exist. " +
+                "Here is how to fix it: " +
+                "\n\n" +
+                "\tYou have two options. You can either build it yourself or download a prebuilt one. \n" +
+                "\tI would assume that you are just a standard game dev, so you would most likely want" +
+                "a prebuilt one. \n" +
+                "\tYou can download the eucalyptus_core library from https://github.com/4tkbytes/dropbear in the " +
+                "releases tab. \n" +
+                "\tOnce you have the library, you can put it in the libs folder in the root of this project.\n" +
+                "\tIn the case that there is no release, or you just want the cutting edge, you can build it " +
+                "yourself. \n" +
+                "\tBuild instructions can be found here: https://github.com/4tkbytes/dropbear/blob/main/README.md" +
+                "but here it is anyways: \n" +
+                "\t\t1. Clone the dropbear repository. \n" +
+                "\t\t2. Run cargo build --release \n" +
+                "\t\t3. The library should be in the target/debug or target/release folder depending on how you " +
+                "built it (most likely the release)\n" +
+                "\t\t4. Copy the library into the libs folder in the root of this project.\n" +
+                "\t\t5. Profit!" +
+                "\n\n" +
+                "If there is still a further issue, please open an issue on the dropbear repository\n" +
+                "\n" +
+                "\t\tAnyhow, glhf :)"
+        )
+    }
+
+    nativeTarget.apply {
+        binaries {
+            sharedLib {
+                baseName = "project"
+                export("com.dropbear:dropbear:1.0-SNAPSHOT")
+                linkerOpts(
+                    libPath,
+                    "-Wl,-rpath,\\\$ORIGIN"
+                )
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                api("com.dropbear:dropbear:1.0-SNAPSHOT")
+            }
+        }
+    }
+}
