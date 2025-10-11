@@ -48,29 +48,29 @@ kotlin {
         println("Local library exists")
         "${project.rootDir}/libs/$libName"
     } else {
-        throw GradleException("libeucalyptus_core.so does not exist. " +
-                "Here is how to fix it: " +
-                "\n\n" +
-                "\tYou have two options. You can either build it yourself or download a prebuilt one. \n" +
-                "\tI would assume that you are just a standard game dev, so you would most likely want" +
-                "a prebuilt one. \n" +
-                "\tYou can download the eucalyptus_core library from https://github.com/4tkbytes/dropbear in the " +
-                "releases tab. \n" +
-                "\tOnce you have the library, you can put it in the libs folder in the root of this project.\n" +
-                "\tIn the case that there is no release, or you just want the cutting edge, you can build it " +
-                "yourself. \n" +
-                "\tBuild instructions can be found here: https://github.com/4tkbytes/dropbear/blob/main/README.md" +
-                "but here it is anyways: \n" +
-                "\t\t1. Clone the dropbear repository. \n" +
-                "\t\t2. Run cargo build --release \n" +
-                "\t\t3. The library should be in the target/debug or target/release folder depending on how you " +
-                "built it (most likely the release)\n" +
-                "\t\t4. Copy the library into the libs folder in the root of this project.\n" +
-                "\t\t5. Profit!" +
-                "\n\n" +
-                "If there is still a further issue, please open an issue on the dropbear repository\n" +
-                "\n" +
-                "\t\tAnyhow, glhf :)"
+        throw GradleException(
+            "The required library [$libName] does not exist. \n" +
+                    "\n" +
+                    "Here is how to fix it:\n" +
+                    "============================================================================\n" +
+                    "You have two options. You can either build it yourself or download a prebuilt one. I would assume that you are just a standard game dev, so you would most likely want a prebuilt one. \n" +
+                    "\n" +
+                    "a. You can download the eucalyptus_core library from https://github.com/4tkbytes/dropbear in the releases tab. \n" +
+                    "Once you have the library, you can put it in the libs folder in the root of this project.\n" +
+                    "\n" +
+                    "In the case that there is no release, or you just want the cutting edge, you can build it yourself. \n" +
+                    "\n" +
+                    "b. Build instructions can be found here: https://github.com/4tkbytes/dropbear/blob/main/README.md but here it is anyways: \n" +
+                    "\n" +
+                    "\t1. Clone the dropbear repository. \n" +
+                    "\t2. Run cargo build --release\n" +
+                    "\t3. The library should be in the target/debug or target/release folder depending on how you built it (most likely the release). Copy that library into the ${project.rootDir}/libs folder. \n" +
+                    "\t4. Profit!\n" +
+                    "\t\n" +
+                    "If there is still a further issue, please open an issue on the dropbear repository.\n" +
+                    "\n" +
+                    "Anyhow, glhf ꉂ(˵˃ ᗜ ˂˵)\n" +
+                    "============================================================================"
         )
     }
 
