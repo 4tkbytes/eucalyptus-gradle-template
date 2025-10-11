@@ -11,7 +11,9 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://www.jitpack.io") }
+    maven {
+        url = uri("https://4tkbytes.github.io/dropbear/")
+    }
 }
 
 kotlin {
@@ -89,7 +91,7 @@ kotlin {
         commonMain {
             dependencies {
 		// TODO: change this when there is a proper release
-                api("com.dropbear:dropbear:main-SNAPSHOT")
+                api("com.dropbear:dropbear:1.0-SNAPSHOT")
             }
         }
     }
