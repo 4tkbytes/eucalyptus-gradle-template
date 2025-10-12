@@ -4,6 +4,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinxSerialization)
+    id("magna-carta") version "1.0-SNAPSHOT"
 }
 
 group = "domain.projectExample"
@@ -90,9 +91,21 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-		// TODO: change this when there is a proper release
+		        // TODO: change this when there is a proper release
                 api("com.dropbear:dropbear:1.0-SNAPSHOT")
             }
         }
+
+        // -----------------------------------------------------------------------------------------------
+        //               ENSURE THIS IS KEPT OTHERWISE MAGNA-CARTA WON'T BE ABLE TO RUN
+        // -----------------------------------------------------------------------------------------------
+        val jvmMain by getting {
+            kotlin.srcDir(layout.buildDirectory.dir("magna-carta/jvmMain"))
+        }
+
+        val nativeLibMain by getting {
+            kotlin.srcDir(layout.buildDirectory.dir("magna-carta/nativeLibMain"))
+        }
+        // -----------------------------------------------------------------------------------------------
     }
 }

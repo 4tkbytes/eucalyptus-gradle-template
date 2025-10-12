@@ -1,10 +1,10 @@
-// Template script for your convenience. Take a look at the docs at TODO
+package domain.example
 
 import com.dropbear.DropbearEngine
 import com.dropbear.Runnable
 import com.dropbear.System
 
-@Runnable
+@Runnable(["tag1", "tag2"])
 class Script: System {
     override fun load(engine: DropbearEngine) {
         println("I have awoken")
