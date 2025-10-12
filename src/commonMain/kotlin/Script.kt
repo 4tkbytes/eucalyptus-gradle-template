@@ -1,5 +1,3 @@
-package domain.example
-
 import com.dropbear.DropbearEngine
 import com.dropbear.Runnable
 import com.dropbear.System
